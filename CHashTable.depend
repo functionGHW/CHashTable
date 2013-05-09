@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1368090137 source:d:\users\codeblocks\chashtable\main.c
+	<stdio.h>
+	<stdlib.h>
+	"CHashTable.h"
+
+1368090919 source:d:\users\codeblocks\chashtable\chashtable.c
+	"CHashTable.h"
+	<stdlib.h>
+	<string.h>
+
+1368091317 d:\users\codeblocks\chashtable\chashtable.h
+	<stddef.h>
+
