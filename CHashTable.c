@@ -1,8 +1,8 @@
-/* Project:     HashTable in C
- * File:        CHashTable.c
+/* Project:     Hashtable in C
+ * File:        CHashtable.c
  * Coder:       FunctionGHW
- * Version:     0.8
- * Last Change: 2013-5-11
+ * Version:     1.0
+ * Last Change: 2013-5-12
  * Description: Hashtable for C Programs.
  *              Note:   In this implementation, the function hashtable_hash() only
  *                      return a hashcode(sometimes greater than table's size),
@@ -19,18 +19,18 @@
  *                              and one kind of data type for val;
  */
 
-#include "CHashTable.h"
+#include "CHashtable.h"
 #include <stdlib.h>
 #include <string.h>
 
 //Create a new hashtable with size of specified value;
-HashTable* new_hashtable(size_t size)
+Hashtable* new_hashtable(size_t size)
 {
     if (size < 1)
     {
         return NULL;
     }
-    HashTable* newtable = (HashTable*)malloc(sizeof(HashTable));
+    Hashtable* newtable = (Hashtable*)malloc(sizeof(Hashtable));
     if (newtable == NULL)
     {
         return NULL;
@@ -47,7 +47,7 @@ HashTable* new_hashtable(size_t size)
 }
 
 //Get the size of a hashtable;
-size_t hashtable_size(const HashTable* table)
+size_t hashtable_size(const Hashtable* table)
 {
     if (table == NULL)
     {
@@ -60,7 +60,7 @@ size_t hashtable_size(const HashTable* table)
 }
 
 //Get the number of elements contained in the hashtable;
-size_t hashtable_elemts_count(const HashTable* table)
+size_t hashtable_elemts_count(const Hashtable* table)
 {
     if (table == NULL)
     {
@@ -76,17 +76,18 @@ size_t hashtable_elemts_count(const HashTable* table)
 size_t hashtable_hash(const BYTE* key, size_t key_size)
 {
     size_t ret = 0,
-           seed = 131, // 31 131 1313 13131 131313 etc..
+           //seed = 131, // 31 131 1313 13131 131313 etc..
            i;
     for (i = 0; i < key_size; ++i)
     {
-        ret = ret * seed + key[i];
+        //ret = ret * seed + key[i];
+        ret = (ret << 7) + (ret << 1) + ret + key[i];
     }
     return ret;
 }
 
 //Determines whether the hashtable contains a specific element;
-int hashtable_contains_key(const HashTable* table, const BYTE* key, size_t key_size)
+int hashtable_contains_key(const Hashtable* table, const BYTE* key, size_t key_size)
 {
     if (table == NULL || key == NULL || key_size < 1)
     {
@@ -106,14 +107,17 @@ int hashtable_contains_key(const HashTable* table, const BYTE* key, size_t key_s
     return 0;
 }
 
-//Search the hashtable and return the value with specific key;
-//Note: this function just return a memory block without any info about it's type and size;
-//      In order to avoid problems, I suggest that
-//          one hashtable only use one kind of data type for key, and one kind of data type for val;
-//      You can add more info to the names:
-//              HashTable tab_str_str = new_hashtable(size);
-//              HashTable tab_str_int = new_hashtable(size);
-BYTE* hashtable_getval(const HashTable* table, const BYTE* key, size_t key_size)
+/*Search the hashtable and return the value with specific key;
+ *Note: this function just return a memory block without any
+ *      info about it's type and size;
+ *      In order to avoid problems, I suggest that
+ *          one hashtable only use one kind of data type for key,
+ *          and one kind of data type for val;
+ *      You can add more info to the names:
+ *              Hashtable tab_str_str = new_hashtable(size);
+ *              Hashtable tab_str_int = new_hashtable(size);
+ */
+BYTE* hashtable_getval(const Hashtable* table, const BYTE* key, size_t key_size)
 {
     if (table == NULL || key == NULL || key_size < 1)
     {
@@ -143,8 +147,13 @@ BYTE* hashtable_getval(const HashTable* table, const BYTE* key, size_t key_size)
     return NULL;
 }
 
-//Add a new element into the hashtable, if the key has exist in the hashtable, do nothing;
-void hashtable_add(HashTable* table, const BYTE* key, size_t key_size, const BYTE* val, size_t val_size)
+//Add a new element into the hashtable,
+//if the key has exist in the hashtable, do nothing;
+void hashtable_add(Hashtable* table,
+                   const BYTE* key,
+                   size_t key_size,
+                   const BYTE* val,
+                   size_t val_size)
 {
     if (table == NULL || key == NULL || key_size < 1)
     {
@@ -197,7 +206,7 @@ void hashtable_add(HashTable* table, const BYTE* key, size_t key_size, const BYT
     table->elemts_count++;
 }
 //Remove a specific element from the hashtable;
-void hashtable_remove(HashTable* table, const BYTE* key, size_t key_size)
+void hashtable_remove(Hashtable* table, const BYTE* key, size_t key_size)
 {
     if (table == NULL || key == NULL || key_size < 1)
     {
@@ -242,7 +251,7 @@ void hashtable_remove(HashTable* table, const BYTE* key, size_t key_size)
 }
 
 //Dispose the hashtable;
-void hashtable_dispose(HashTable* table)
+void hashtable_dispose(Hashtable* table)
 {
     if (table == NULL)
     {
@@ -256,7 +265,7 @@ void hashtable_dispose(HashTable* table)
 }
 
 //Romove all elements of the hashtable;
-void hashtable_empty(HashTable* table)
+void hashtable_empty(Hashtable* table)
 {
     if (table == NULL || table->table == NULL || table->elemts_count < 1)
     {

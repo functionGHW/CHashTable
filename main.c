@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
-#include "CHashTable.h"
+#include "CHashtable.h"
 
-void print_hashtable(HashTable* table)
+void print_hashtable(Hashtable* table)
 {
     if (table == NULL || table->table == NULL)
     {
@@ -38,11 +39,11 @@ int main()
 {
     const int TABLE_SIZE = 101;
     int i;
-    HashTable* ht_str_str = new_hashtable(TABLE_SIZE);
+    Hashtable* ht_str_str = new_hashtable(TABLE_SIZE);
     print_hashtable(ht_str_str);
 
     srand(time(NULL));
-    for (i = 0; i < TABLE_SIZE; ++i)
+    for (i = 0; i < TABLE_SIZE << 1; ++i)
     {
         int len = rand() % 100 + 1;
         int key_size = len + 1;
@@ -85,9 +86,11 @@ int main()
     }
 
     print_hashtable(ht_str_str);
-    hashtable_add(ht_str_str, (BYTE*)"hello world", 12, (BYTE*)"fuck haitai", 12);
-    printf("find :%d\n", hashtable_contains_key(ht_str_str, (BYTE*)"hello world", 12));
-    printf("find :%d\n", hashtable_contains_key(ht_str_str, (BYTE*)"fuck world", 11));
+
+    /* the function strlen(const char* s) return the length of string s(not include the end char '\0')*/
+    hashtable_add(ht_str_str, (BYTE*)"hello world", strlen("hello world") + 1, (BYTE*)"fuck haitai", strlen("hello world") +1);
+    printf("find :%d\n", hashtable_contains_key(ht_str_str, (BYTE*)"hello world", strlen("hello world") + 1));
+    printf("find :%d\n", hashtable_contains_key(ht_str_str, (BYTE*)"fuck world", strlen("fuck world") + 1));
 
     char* pstr = (char*)hashtable_getval(ht_str_str, (BYTE*)"hello world", 12);
     printf("get :%s\n", pstr);
@@ -101,6 +104,7 @@ int main()
     pstr = (char*)hashtable_getval(ht_str_str, (BYTE*)&k, sizeof(k));
     printf("'null' key's value :%s\n", pstr);
     free(pstr);
+    hashtable_remove(ht_str_str, (BYTE*)&p, sizeof(p));
     hashtable_empty(ht_str_str);
     //print_hashtable(ht_str_str);
 

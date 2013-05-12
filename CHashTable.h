@@ -1,8 +1,8 @@
-/* Project:     HashTable in C
- * File:        CHashTable.h
+/* Project:     Hashtable in C
+ * File:        CHashtable.h
  * Coder:       FunctionGHW
- * Version:     0.8
- * Last Change: 2013-5-11
+ * Version:     1.0
+ * Last Change: 2013-5-12
  * Description: Hashtable for C Programs, using chaining to deal with collisions.
  *              This is the header file.
  */
@@ -18,7 +18,7 @@ typedef unsigned char BYTE;
 #endif
 
 typedef struct HashLnkLstNode HashLnkLstNode;
-typedef struct HashTable HashTable;
+typedef struct Hashtable Hashtable;
 
 struct HashLnkLstNode
 {
@@ -29,33 +29,38 @@ struct HashLnkLstNode
     HashLnkLstNode* next;
 };
 
-struct HashTable
+struct Hashtable
 {
-    size_t size; //This is the size of array, which contains all header of the single-linked list;
+    size_t size; //This is the size of the table,
+                 //which contains all header of the single-linked list;
     size_t elemts_count; // The count can be greater than size;
 
     HashLnkLstNode** table;
 };
 
 //Create a new hashtable with size of specified value;
-HashTable* new_hashtable(size_t size);
+Hashtable* new_hashtable(size_t size);
 //Get the size of a hashtable;
-size_t hashtable_size(const HashTable* table);
+size_t hashtable_size(const Hashtable* table);
 //Get the number of elements contained in the hashtable;
-size_t hashtable_elemts_count(const HashTable* table);
+size_t hashtable_elemts_count(const Hashtable* table);
 //The hash function;
 size_t hashtable_hash(const BYTE* key, size_t key_size);
 //Determines whether the hashtable contains a specific element;
-int hashtable_contains_key(const HashTable* table, const BYTE* key, size_t key_size);
+int hashtable_contains_key(const Hashtable* table, const BYTE* key, size_t key_size);
 //Search the hashtable and return the value with specific key;
-BYTE* hashtable_getval(const HashTable* table, const BYTE* key, size_t key_size);
+BYTE* hashtable_getval(const Hashtable* table, const BYTE* key, size_t key_size);
 //Add a new element into the hashtable, if the key has exist in the hashtable, do nothing;
-void hashtable_add(HashTable* table, const BYTE* key, size_t key_size, const BYTE* val, size_t val_size);
+void hashtable_add(Hashtable* table,
+                   const BYTE* key,
+                   size_t key_size,
+                   const BYTE* val,
+                   size_t val_size);
 //Remove a specific element from the hashtable;
-void hashtable_remove(HashTable* table, const BYTE* key, size_t key_size);
+void hashtable_remove(Hashtable* table, const BYTE* key, size_t key_size);
 //Dispose the hashtable;
-void hashtable_dispose(HashTable* table);
+void hashtable_dispose(Hashtable* table);
 //Romove all elements of the hashtable;
-void hashtable_empty(HashTable* table);
+void hashtable_empty(Hashtable* table);
 
 #endif // CHASHTABLE_H_BDD25836_8BE8_4079_B2E6_9CDF3EB0CD20
